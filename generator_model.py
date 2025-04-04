@@ -1,4 +1,5 @@
 import torch.nn as nn
+from torchinfo import summary
 
 class Generator(nn.Module):
     def __init__(self, z_dim, image_size):
@@ -49,9 +50,12 @@ if __name__ == "__main__":
     # Test du Generator
     import torch
     z_dim = 100
-    image_size = 64
+    image_size = 28
     generator = Generator(z_dim, image_size)
     print(generator)
+
+    # Summary du modèle
+    summary(generator)
 
     # Test avec un vecteur latent de taille 100 et batch de 8
     test_input = torch.randn(8, z_dim)

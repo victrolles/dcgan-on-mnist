@@ -9,7 +9,7 @@ python -m venv .venv
 
 Activate venv
 ```bash
-source .venv/bin/activate
+.venv\Scripts\activate
 ```
 
 Install requirements

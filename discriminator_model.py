@@ -1,4 +1,5 @@
 import torch.nn as nn
+from torchinfo import summary
 
 class Discriminator(nn.Module):
     def __init__(self, image_channels=1):
@@ -11,18 +12,18 @@ class Discriminator(nn.Module):
         in_channels = image_channels
 
         for i, out_channels in enumerate(self.layer_filters):
+            
             stride = 2 if out_channels < 200 else 1
-            self.convNet.add_module(f'bn_{i}', nn.BatchNorm2d(in_channels))
+            print(stride)
             self.convNet.add_module(f'relu_{i}', nn.LeakyReLU(0.2, True))
             self.convNet.add_module(
                 f'convT_{i}', 
-                nn.ConvTranspose2d(
+                nn.Conv2d(
                     in_channels=in_channels,
                     out_channels=out_channels,
                     kernel_size=self.kernel_size,
                     stride=stride,
-                    padding=self.kernel_size // 2,
-                    output_padding=1 if stride == 2 else 0
+                    padding='same'
                 )
             )
             in_channels = out_channels
@@ -30,7 +31,7 @@ class Discriminator(nn.Module):
         # Couches finales
         self.net = nn.Sequential(
             nn.Flatten(),
-            nn.Linear(12845056, 1),
+            nn.Linear(4096, 1),
             nn.Sigmoid()
 
         )
@@ -48,7 +49,10 @@ if __name__ == "__main__":
     discriminator = Discriminator()
     print(discriminator)
 
+    # Summary du modèle
+    summary(discriminator)
+
     # Test avec un batch de 8 images de taille 64x64 avec 1 canal (grayscale)
-    test_input = torch.randn(8, 1, 64, 64)
+    test_input = torch.randn(8, 1, 28, 28)
     output = discriminator(test_input)
     print(output.shape)  # Devrait être [8, 1]
