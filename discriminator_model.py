@@ -1,15 +1,9 @@
+import torch
 import torch.nn as nn
 from torchinfo import summary
 
 class Discriminator(nn.Module):
-    """Build a Discriminator Model 
-    Stack of LeakyReLU-Conv2d to discriminate real from fake. 
-    The network does not use BatchNorm as mentioned in the original code.
-    
-    Arguments: 
-        image_size (tuple): Size of input image (height, width)
-        channels (int): Number of input channels
-    """
+
     def __init__(self, image_size=(28, 28), channels=1):
         super(Discriminator, self).__init__()
         
@@ -42,9 +36,7 @@ class Discriminator(nn.Module):
             
             in_channels = filters
         
-        # Calculate output size after convolutions
-        # This depends on the input size and stride/padding configuration
-        # For simplicity, we'll use adaptive pooling to handle any input size
+        # Adaptive pooling layer : to reduce the output to a fixed size
         self.model.add_module('adaptive_pool', nn.AdaptiveAvgPool2d((1, 1)))
         
         # Flatten layer
@@ -55,19 +47,10 @@ class Discriminator(nn.Module):
         self.model.add_module('sigmoid', nn.Sigmoid())
         
     def forward(self, x):
-        """Forward pass
-        
-        Arguments:
-            x (Tensor): Input tensor of shape (batch_size, channels, height, width)
-            
-        Returns:
-            Tensor: Output tensor of shape (batch_size, 1)
-        """
         return self.model(x)
-    
+
+# Test du Discriminator
 if __name__ == "__main__":
-    # Test du Discriminator
-    import torch
     discriminator = Discriminator()
     print(discriminator)
 

@@ -74,7 +74,7 @@ class Trainer():
         return g_loss
 
     def train_discriminator(self, real_images):
-        # Set the discriminator in training mode
+        # Set the discriminator in training mode and the generator in evaluation mode
         self.discriminator.train()
         self.generator.eval()
 
