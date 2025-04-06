@@ -4,7 +4,7 @@ from torchinfo import summary
 
 class Discriminator(nn.Module):
 
-    def __init__(self, image_size=(28, 28), channels=1):
+    def __init__(self, channels=1):
         super(Discriminator, self).__init__()
         
         kernel_size = 5
@@ -17,8 +17,6 @@ class Discriminator(nn.Module):
         
         # Building the convolutional layers
         for i, filters in enumerate(layer_filters):
-            # first 3 convolution layers use strides = 2
-            # last one uses strides = 1
             strides = 1 if filters == layer_filters[-1] else 2
             
             # LeakyReLU followed by Conv2d
@@ -30,7 +28,7 @@ class Discriminator(nn.Module):
                     out_channels=filters,
                     kernel_size=kernel_size,
                     stride=strides,
-                    padding=kernel_size // 2  # same padding
+                    padding=kernel_size // 2
                 )
             )
             
@@ -57,7 +55,7 @@ if __name__ == "__main__":
     # Summary du modèle
     summary(discriminator)
 
-    # Test avec un batch de 8 images de taille 64x64 avec 1 canal (grayscale)
+    # Test avec un batch de 8 images
     test_input = torch.randn(8, 1, 28, 28)
     output = discriminator(test_input)
-    print(output.shape)  # Devrait être [8, 1]
+    print(output.shape)
