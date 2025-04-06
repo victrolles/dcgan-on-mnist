@@ -22,7 +22,7 @@ class Trainer():
         # Hyperparameters
         self.latent_size = 100
         self.batch_size = 16
-        self.train_steps = 40000
+        self.train_steps = 100000
         self.lr = 2e-4
         self.decay = 6e-8
         self.image_size = 28
@@ -39,7 +39,7 @@ class Trainer():
         self.data_loader = DataLoader(mnist_data, batch_size=self.batch_size, shuffle=True)
 
     def initialize_models(self):
-        self.discriminator = Discriminator(image_channels=1).to(self.device)
+        self.discriminator = Discriminator().to(self.device)
         self.generator = Generator(z_dim=self.latent_size, image_size=self.image_size).to(self.device)
 
     def initialize_optimizers(self):
